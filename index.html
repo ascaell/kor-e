@@ -137,7 +137,7 @@
 
 <div class="intro" id="intro">
 
-  <video id="elephantVideo" class="elephant-video" autoplay loop playsinline>
+  <video id="elephantVideo" class="elephant-video" autoplay loop muted playsinline>
     <source src="assets/elephant-loop.mp4" type="video/mp4">
   </video>
 
@@ -165,13 +165,20 @@
   const video = document.getElementById('elephantVideo');
   const soundGate = document.getElementById('soundGate');
 
-  // Try autoplay WITH sound. Browsers will likely block → fallback muted + show sound button.
-  video.muted = false;
+  // Video starts muted (guaranteed autoplay). Try to unmute immediately.
   video.volume = 1.0;
 
-  video.play().catch(() => {
-    video.muted = true;
-    video.play();
+  video.play().then(() => {
+    // Playing (muted). Try to unmute.
+    video.muted = false;
+    // If browser blocks the unmute, muted stays true → show gate
+    setTimeout(() => {
+      if (video.muted) {
+        soundGate.classList.add('show');
+      }
+    }, 100);
+  }).catch(() => {
+    // Even muted autoplay failed (rare) → show gate
     soundGate.classList.add('show');
   });
 
@@ -179,6 +186,7 @@
     e.stopPropagation();
     video.muted = false;
     video.volume = 1.0;
+    video.play();
     soundGate.style.display = 'none';
   });
 
