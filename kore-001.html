@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KORÉ 001 — L'origine sculptée</title>
+
+  <!-- ═══════════ GOOGLE FONTS : FRAUNCES + INTER TIGHT ═══════════ -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,100..900,0..100,0..1;1,9..144,100..900,0..100,0..1&family=Inter+Tight:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
+  <style>
+    /* ═══════════════════════════ RESET & DESIGN SYSTEM ═══════════════════════════ */
+    * { margin:0; padding:0; box-sizing:border-box; transition:color 0.6s ease, background-color 0.6s ease, border-color 0.6s ease, box-shadow 0.6s ease; }
+    :root {
+      --bg-primary:#050505; --bg-secondary:#0A0A0A; --bone:#F5EFE6; --bronze:#D4A574;
+      --bronze-deep:#8B6F47; --indigo:#1E2A5C; --pink:#E88AAA; --accent-dark:#0A0A0A;
+      --text-secondary:rgba(245,239,230,0.6); --text-tertiary:rgba(245,239,230,0.4);
+      --border-subtle:rgba(212,165,116,0.15); --border-medium:rgba(212,165,116,0.4);
+      --serif:'Fraunces','Times New Roman',serif; --sans:'Inter Tight',-apple-system,sans-serif;
+      --font-opsz:144; --font-soft:50; --font-wonk:1;
+      --transition-theme:0.6s cubic-bezier(0.22,1,0.36,1);
+    }
+    /* ═══════════ THÈMES ═══════════ */
+    body.theme-origine { --bg-primary:#050505;--bg-secondary:#0A0A0A;--bone:#F5EFE6;--bronze:#D4A574;--bronze-deep:#8B6F47;--pink:#E88AAA;--accent-dark:#0A0A0A;--text-secondary:rgba(245,239,230,0.6);--text-tertiary:rgba(245,239,230,0.4);--border-subtle:rgba(212,165,116,0.15);--border-medium:rgba(212,165,116,0.4); }
+    body.theme-laterite { --bg-primary:#2A0F0A;--bg-secondary:#1F0B07;--bone:#FFF4E6;--bronze:#C87137;--bronze-deep:#A0522D;--pink:#D4856B;--accent-dark:#1A0805;--text-secondary:rgba(255,244,230,0.6);--text-tertiary:rgba(255,244,230,0.4);--border-subtle:rgba(200,113,55,0.2);--border-medium:rgba(200,113,55,0.5); }
+    body.theme-indigo { --bg-primary:#0A1428;--bg-secondary:#0C1830;--bone:#EFE6D2;--bronze:#C9B072;--bronze-deep:#8B7A4A;--pink:#A08CB0;--accent-dark:#060D1A;--text-secondary:rgba(239,230,210,0.6);--text-tertiary:rgba(239,230,210,0.4);--border-subtle:rgba(201,176,114,0.2);--border-medium:rgba(201,176,114,0.5); }
+    body.theme-ivoire { --bg-primary:#F5EFE6;--bg-secondary:#EDE5D8;--bone:#0A0A0A;--bronze:#8B6F47;--bronze-deep:#5C452A;--pink:#B8442E;--accent-dark:#1A1A1A;--text-secondary:rgba(10,10,10,0.6);--text-tertiary:rgba(10,10,10,0.4);--border-subtle:rgba(139,111,71,0.2);--border-medium:rgba(139,111,71,0.5); }
+    body.theme-obsidienne { --bg-primary:#000000;--bg-secondary:#050505;--bone:#8A8580;--bronze:#B8763A;--bronze-deep:#6B3F1F;--pink:#8A8580;--accent-dark:#000000;--text-secondary:rgba(138,133,128,0.6);--text-tertiary:rgba(138,133,128,0.4);--border-subtle:rgba(184,118,58,0.2);--border-medium:rgba(184,118,58,0.5); }
+
+    html,body { background:var(--bg-primary); color:var(--bone); font-family:var(--sans); overflow-x:hidden; scroll-behavior:smooth; transition:background-color var(--transition-theme),color var(--transition-theme); }
+    body { cursor:none; }
+    a { color:inherit; text-decoration:none; }
+    ::selection { background:var(--bronze); color:var(--bg-primary); }
+
+    /* ═══════════ SCROLL PROGRESS + COUNTER ═══════════ */
+    #scrollProgress { position:fixed; top:0; left:0; height:1px; background:var(--bronze); z-index:9997; width:0%; transition:width 0.1s linear; pointer-events:none; }
+    #sectionCounter { position:fixed; bottom:32px; left:32px; z-index:90; font-family:var(--serif); font-size:13px; letter-spacing:0.2em; color:var(--text-tertiary); pointer-events:none; transition:opacity 0.4s ease; font-variation-settings:"opsz" 14,"SOFT" 30,"WONK" 0; }
+    #sectionCounter span { color:var(--bronze); font-weight:500; }
+
+    /* ═══════════ CURSOR ═══════════ */
+    .cursor { position:fixed; width:12px; height:12px; border-radius:50%; background:var(--bronze); pointer-events:none; z-index:9999; mix-blend-mode:difference; transition:transform 0.15s ease,width 0.3s ease,height 0.3s ease,background-color 0.6s ease; transform:translate(-50%,-50%); }
+    .cursor-ring { position:fixed; width:40px; height:40px; border:1px solid var(--bronze); border-radius:50%; pointer-events:none; z-index:9998; transition:transform 0.4s cubic-bezier(0.22,1,0.36,1),width 0.3s ease,height 0.3s ease,opacity 0.3s ease,border-color 0.6s ease; transform:translate(-50%,-50%); opacity:0.5; }
+    .cursor.hover { transform:translate(-50%,-50%) scale(0.4); }
+    .cursor-ring.hover { width:80px; height:80px; opacity:0.9; }
+    .cursor-ring.click { width:20px; height:20px; opacity:1; transition:transform 0.15s ease,width 0.15s ease,height 0.15s ease,opacity 0.15s ease; }
+
+    /* ═══════════ NAV ═══════════ */
+    nav { position:fixed; top:0; left:0; right:0; z-index:100; padding:24px 48px; display:flex; justify-content:space-between; align-items:center; mix-blend-mode:difference; transition:padding 0.4s ease; }
+    body.theme-ivoire nav { mix-blend-mode:normal; background:rgba(245,239,230,0.85); backdrop-filter:blur(12px); }
+    nav.scrolled { padding:14px 48px; }
+    .nav-row { display:flex; align-items:center; gap:24px; }
+    .nav-logo { font-family:var(--serif); font-size:22px; font-weight:400; letter-spacing:0.25em; color:var(--bone); font-variation-settings:"opsz" 24,"SOFT" 40,"WONK" 1; }
+    .nav-links { display:flex; gap:40px; list-style:none; font-size:11px; letter-spacing:0.3em; text-transform:uppercase; }
+    .nav-links a { color:var(--bone); opacity:0.8; transition:opacity 0.3s; }
+    .nav-links a:hover { opacity:1; }
+    .nav-cart { font-size:11px; letter-spacing:0.3em; text-transform:uppercase; display:flex; align-items:center; gap:8px; }
+    .nav-cart .dot { width:6px; height:6px; border-radius:50%; background:var(--bronze); }
+
+    /* THEME TOGGLE */
+    .theme-toggle-btn { background:transparent; border:1px solid var(--border-medium); color:var(--bone); font-family:var(--sans); font-size:10px; letter-spacing:0.3em; text-transform:uppercase; padding:8px 14px; border-radius:4px; cursor:none; display:flex; align-items:center; gap:8px; transition:all 0.3s ease; white-space:nowrap; }
+    .theme-toggle-btn:hover { background:var(--bronze); color:var(--bg-primary); border-color:var(--bronze); }
+    .theme-panel { position:fixed; top:80px; right:48px; background:var(--bg-secondary); border:1px solid var(--border-subtle); border-radius:8px; padding:20px 24px; z-index:110; display:none; flex-direction:column; gap:10px; min-width:220px; box-shadow:0 20px 50px rgba(0,0,0,0.5); backdrop-filter:blur(20px); animation:fadeIn 0.3s ease; }
+    .theme-panel.open { display:flex; }
+    .theme-panel h4 { font-family:var(--sans); font-size:9px; letter-spacing:0.4em; text-transform:uppercase; color:var(--text-tertiary); margin-bottom:4px; }
+    .theme-option { display:flex; align-items:center; gap:12px; padding:8px 10px; border-radius:4px; cursor:none; transition:background 0.3s ease; font-size:11px; letter-spacing:0.2em; color:var(--bone); border:1px solid transparent; }
+    .theme-option:hover { background:rgba(255,255,255,0.04); border-color:var(--border-subtle); }
+    .theme-option.active { border-color:var(--bronze); background:rgba(212,165,116,0.08); }
+    .theme-swatch { width:18px; height:18px; border-radius:50%; flex-shrink:0; border:2px solid transparent; }
+    .theme-option.active .theme-swatch { border-color:var(--bronze); }
+    .swatch-origine{background:#050505;box-shadow:inset 0 0 0 3px #D4A574;} .swatch-laterite{background:#2A0F0A;box-shadow:inset 0 0 0 3px #C87137;} .swatch-indigo{background:#0A1428;box-shadow:inset 0 0 0 3px #C9B072;} .swatch-ivoire{background:#F5EFE6;box-shadow:inset 0 0 0 3px #8B6F47;} .swatch-obsidienne{background:#000000;box-shadow:inset 0 0 0 3px #B8763A;}
+
+    /* ═══════════ SECTION META ═══════════ */
+    .section-rule { width:100%; height:0; border-bottom:0.5px solid rgba(255,255,255,0.08); margin:0; }
+    .section-meta { padding:16px 6vw; font-size:9px; letter-spacing:0.4em; text-transform:uppercase; color:var(--text-tertiary); display:flex; justify-content:space-between; align-items:center; border-bottom:0.5px solid rgba(255,255,255,0.05); }
+    .section-number { font-family:var(--serif); font-size:10px; letter-spacing:0.5em; color:var(--bronze); font-variation-settings:"opsz" 12,"SOFT" 30,"WONK" 0; }
+
+    /* ═══════════ FADEIN ═══════════ */
+    @keyframes fadeIn{ to{opacity:1;} }
+
+    /* ═══════════ HERO SPLIT ═══════════ */
+    .hero-product { display:flex; min-height:100vh; padding-top:80px; }
+    .hero-left { flex:1; position:relative; background:var(--bg-primary); display:flex; align-items:center; justify-content:center; overflow:hidden; border-right:0.5px solid var(--border-subtle); }
+    .hero-video-wrap { width:100%; height:100%; position:relative; }
+    .hero-video-wrap video { width:100%; height:100%; object-fit:cover; }
+    .hero-video-fallback { position:absolute; inset:0; background:radial-gradient(circle at 50% 60%,rgba(212,165,116,0.12) 0%,transparent 60%), linear-gradient(135deg,#0F0F0F 0%,#1A1414 100%); display:flex; align-items:center; justify-content:center; }
+    .hero-video-fallback::after { content:"◈ Vue 360°"; font-size:12px; letter-spacing:0.4em; color:var(--text-tertiary); }
+    .thumbnails { position:absolute; bottom:24px; left:50%; transform:translateX(-50%); display:flex; gap:12px; z-index:5; }
+    .thumb { width:48px; height:48px; border:1px solid var(--border-medium); border-radius:4px; overflow:hidden; cursor:none; opacity:0.7; transition:all 0.3s ease; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,0.5); backdrop-filter:blur(4px); font-size:8px; letter-spacing:0.2em; color:var(--text-tertiary); }
+    .thumb.active { border-color:var(--bronze); opacity:1; }
+    .thumb img { width:100%; height:100%; object-fit:cover; }
+    .zoom-hint { position:absolute; top:20px; right:20px; font-size:10px; letter-spacing:0.3em; color:var(--text-tertiary); z-index:5; pointer-events:none; }
+
+    .hero-right { flex:1; display:flex; align-items:center; padding:80px 6vw; }
+    .product-details { max-width:520px; }
+    .product-tag { font-size:9px; letter-spacing:0.4em; text-transform:uppercase; color:var(--bronze); margin-bottom:12px; }
+    .product-title { font-family:var(--serif); font-size:clamp(60px,8vw,120px); font-weight:300; line-height:0.95; letter-spacing:-0.02em; margin-bottom:8px; font-variation-settings:"opsz" var(--font-opsz),"SOFT" var(--font-soft),"WONK" var(--font-wonk); }
+    .product-subtitle { font-style:italic; font-family:var(--serif); font-size:24px; color:var(--bronze); margin-bottom:20px; font-variation-settings:"opsz" 36,"SOFT" 40,"WONK" 1; }
+    .product-desc { font-size:13px; color:var(--text-secondary); line-height:1.6; margin-bottom:30px; }
+    .price { font-family:var(--serif); font-size:48px; font-weight:300; margin-bottom:4px; font-variation-settings:"opsz" 48,"SOFT" 30,"WONK" 0; }
+    .price-note { font-size:10px; color:var(--text-tertiary); letter-spacing:0.2em; margin-bottom:32px; }
+
+    /* SWATCHES */
+    .color-swatches { display:flex; gap:12px; margin-bottom:28px; }
+    .color-swatch { width:28px; height:28px; border-radius:50%; border:2px solid transparent; cursor:none; transition:all 0.3s ease; }
+    .color-swatch.active { border-color:var(--bronze); transform:scale(1.1); }
+    .swatch-indigo-color{background:#1E2A5C;} .swatch-noir{background:#111;} .swatch-vermillon{background:#8B3A1F;}
+
+    /* SIZE SELECTOR */
+    .size-label { font-size:10px; letter-spacing:0.4em; text-transform:uppercase; color:var(--text-tertiary); margin-bottom:12px; display:flex; justify-content:space-between; }
+    .size-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:28px; }
+    .size-btn { padding:14px 8px; border:1px solid var(--border-subtle); background:transparent; color:var(--bone); font-family:var(--sans); font-size:14px; letter-spacing:0.1em; cursor:none; transition:all 0.3s ease; border-radius:2px; text-align:center; }
+    .size-btn:hover:not(.soldout) { border-color:var(--bronze); background:rgba(212,165,116,0.1); }
+    .size-btn.selected { border-color:var(--bronze); background:rgba(212,165,116,0.2); color:var(--bronze); }
+    .size-btn.soldout { opacity:0.3; text-decoration:line-through; pointer-events:none; }
+
+    /* BUTTONS */
+    .btn-primary { width:100%; padding:18px; background:transparent; border:1px solid var(--bronze); color:var(--bronze); font-family:var(--sans); font-size:13px; letter-spacing:0.4em; text-transform:uppercase; cursor:none; transition:all 0.4s ease; margin-bottom:12px; border-radius:2px; }
+    .btn-primary:hover { background:var(--bronze); color:var(--bg-primary); }
+    .btn-secondary { width:100%; padding:14px; background:transparent; border:1px solid var(--border-subtle); color:var(--text-secondary); font-family:var(--sans); font-size:11px; letter-spacing:0.3em; text-transform:uppercase; cursor:none; transition:all 0.3s ease; margin-bottom:24px; border-radius:2px; }
+    .btn-secondary:hover { border-color:var(--border-medium); color:var(--bone); }
+    .benefits { display:flex; gap:24px; font-size:9px; letter-spacing:0.2em; color:var(--text-tertiary); text-transform:uppercase; margin-bottom:16px; flex-wrap:wrap; }
+    .guide-link { font-size:10px; letter-spacing:0.3em; color:var(--text-tertiary); text-decoration:underline; cursor:none; }
+
+    /* NOTIFICATION */
+    .cart-notification { position:fixed; bottom:30px; right:30px; background:var(--bg-secondary); border:1px solid var(--bronze); padding:16px 24px; z-index:200; font-size:11px; letter-spacing:0.3em; text-transform:uppercase; color:var(--bronze); opacity:0; transform:translateY(20px); pointer-events:none; transition:all 0.4s ease; border-radius:2px; }
+    .cart-notification.show { opacity:1; transform:translateY(0); }
+
+    /* ═══════════ STORY BAR ═══════════ */
+    .story-bar { padding:30px 0; border-top:0.5px solid var(--border-subtle); border-bottom:0.5px solid var(--border-subtle); overflow:hidden; white-space:nowrap; }
+    .story-track { display:inline-block; animation:scroll 25s linear infinite; font-family:var(--serif); font-size:16px; letter-spacing:0.1em; color:var(--text-secondary); font-variation-settings:"opsz" 18,"SOFT" 30,"WONK" 0; }
+    .story-track span { margin:0 28px; }
+    .story-sep { color:var(--bronze); }
+    @keyframes scroll{ from{transform:translateX(0);} to{transform:translateX(-50%);} }
+
+    /* ═══════════ ANATOMY ═══════════ */
+    .anatomy { padding:120px 6vw; display:flex; gap:60px; align-items:center; }
+    .anatomy-left { flex:1.5; position:relative; }
+    .anatomy-img { width:100%; border-radius:4px; overflow:hidden; }
+    .anatomy-img img { width:100%; height:auto; display:block; }
+    .anatomy-placeholder { background:radial-gradient(circle at 50% 50%,rgba(212,165,116,0.1) 0%,transparent 60%), var(--bg-secondary); padding:80px 60px; display:flex; flex-direction:column; gap:30px; align-items:center; position:relative; }
+    .hotspot-line { display:flex; align-items:center; gap:20px; width:100%; position:relative; }
+    .hotspot-dot { width:10px; height:10px; border-radius:50%; background:var(--bronze); flex-shrink:0; }
+    .hotspot-label { font-family:var(--serif); font-size:15px; color:var(--bone); letter-spacing:0.1em; font-variation-settings:"opsz" 18,"SOFT" 30,"WONK" 0; }
+    .hotspot-line::before { content:''; flex:1; height:0.5px; background:var(--border-medium); }
+    .anatomy-right { flex:1; }
+    .anatomy-right h2 { font-family:var(--serif); font-size:clamp(32px,4vw,56px); font-weight:300; margin-bottom:28px; font-variation-settings:"opsz" 48,"SOFT" 30,"WONK" 1; }
+    .anatomy-right p { font-size:13px; color:var(--text-secondary); line-height:1.8; margin-bottom:16px; }
+
+    /* ═══════════ MATERIAUX ═══════════ */
+    .materials { padding:0 6vw 120px; }
+    .materials h2 { font-family:var(--serif); font-size:clamp(40px,5vw,72px); font-weight:300; margin-bottom:48px; font-variation-settings:"opsz" var(--font-opsz),"SOFT" var(--font-soft),"WONK" var(--font-wonk); }
+    .materials h2 em { font-style:italic; color:var(--bronze); }
+    .materials-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
+    .mat-card { background:var(--bg-secondary); border-radius:4px; overflow:hidden; border:0.5px solid var(--border-subtle); transition:transform 0.4s ease; cursor:none; }
+    .mat-card:hover { transform:translateY(-6px); }
+    .mat-img { height:240px; background:var(--bg-secondary); display:flex; align-items:center; justify-content:center; overflow:hidden; }
+    .mat-img img { width:100%; height:100%; object-fit:cover; }
+    .mat-placeholder { width:60px; height:60px; border:1px solid var(--border-medium); border-radius:50%; animation:pulse 3s ease infinite; }
+    @keyframes pulse{ 0%,100%{transform:scale(1);opacity:0.4;} 50%{transform:scale(1.15);opacity:0.7;} }
+    .mat-info { padding:20px; }
+    .mat-name { font-family:var(--serif); font-size:18px; letter-spacing:0.15em; margin-bottom:6px; font-variation-settings:"opsz" 24,"SOFT" 30,"WONK" 0; }
+    .mat-desc { font-size:11px; color:var(--text-secondary); line-height:1.5; margin-bottom:8px; }
+    .mat-origin { font-size:9px; letter-spacing:0.2em; text-transform:uppercase; color:var(--bronze); }
+
+    /* ═══════════ RITUAL TIMELINE ═══════════ */
+    .ritual { padding:0 6vw 120px; position:relative; }
+    .ritual h2 { font-family:var(--serif); font-size:clamp(40px,5vw,72px); font-weight:300; margin-bottom:12px; font-variation-settings:"opsz" var(--font-opsz),"SOFT" var(--font-soft),"WONK" var(--font-wonk); }
+    .ritual h2 em { font-style:italic; color:var(--bronze); }
+    .ritual-sub { font-size:12px; color:var(--text-secondary); letter-spacing:0.3em; text-transform:uppercase; margin-bottom:60px; }
+    .timeline { position:relative; padding-left:80px; }
+    .timeline::before { content:''; position:absolute; left:20px; top:0; bottom:0; width:1px; background:var(--border-medium); }
+    .step { position:relative; margin-bottom:60px; display:flex; gap:30px; align-items:flex-start; }
+    .step-num { font-family:var(--serif); font-size:80px; font-weight:300; font-style:italic; color:var(--bronze); opacity:0.25; line-height:0.8; width:80px; flex-shrink:0; margin-left:-80px; text-align:right; padding-right:20px; font-variation-settings:"opsz" 144,"SOFT" 100,"WONK" 0; }
+    .step-content { flex:1; }
+    .step-title { font-family:var(--serif); font-size:24px; margin-bottom:8px; font-variation-settings:"opsz" 30,"SOFT" 30,"WONK" 1; }
+    .step-desc { font-size:13px; color:var(--text-secondary); line-height:1.7; max-width:500px; }
+    .step-img { width:120px; height:120px; background:var(--bg-secondary); border-radius:4px; overflow:hidden; flex-shrink:0; display:flex; align-items:center; justify-content:center; }
+    .step-img img { width:100%; height:100%; object-fit:cover; }
+    .step-placeholder { width:40px; height:40px; border:1px solid var(--border-medium); border-radius:50%; }
+
+    /* ═══════════ GALLERY ═══════════ */
+    .gallery { padding:0 6vw 120px; }
+    .gallery h2 { font-family:var(--serif); font-size:clamp(40px,5vw,72px); font-weight:300; margin-bottom:40px; font-variation-settings:"opsz" var(--font-opsz),"SOFT" var(--font-soft),"WONK" var(--font-wonk); }
+    .gallery-grid { display:grid; grid-template-columns:repeat(12,1fr); gap:20px; }
+    .gallery-item { background:var(--bg-secondary); border-radius:4px; overflow:hidden; border:0.5px solid var(--border-subtle); transition:transform 0.5s ease; }
+    .gallery-item:hover { transform:translateY(-4px); }
+    .gallery-item img,.gallery-item video { width:100%; height:100%; object-fit:cover; display:block; }
+    .g-item-lg{grid-column:span 8; height:500px;} .g-item-sm{grid-column:span 4; height:500px;}
+    .g-item-md{grid-column:span 6; height:400px;} .g-item-wide{grid-column:span 12; height:350px;}
+    .g-placeholder { width:100%; height:100%; background:radial-gradient(circle at 50% 50%,rgba(212,165,116,0.08) 0%,transparent 60%), var(--bg-secondary); display:flex; align-items:center; justify-content:center; color:var(--text-tertiary); font-size:10px; letter-spacing:0.3em; }
+
+    /* ═══════════ SPECS ACCORDIONS ═══════════ */
+    .specs { padding:0 6vw 120px; max-width:800px; }
+    .specs h2 { font-family:var(--serif); font-size:clamp(40px,5vw,72px); font-weight:300; margin-bottom:40px; font-variation-settings:"opsz" var(--font-opsz),"SOFT" var(--font-soft),"WONK" var(--font-wonk); }
+    .accordion { border-top:0.5px solid var(--border-subtle); }
+    .accordion-item { border-bottom:0.5px solid var(--border-subtle); }
+    .accordion-header { width:100%; padding:20px 0; background:transparent; border:none; color:var(--bone); font-family:var(--serif); font-size:16px; letter-spacing:0.1em; display:flex; justify-content:space-between; align-items:center; cursor:none; transition:color 0.3s; font-variation-settings:"opsz" 20,"SOFT" 30,"WONK" 0; }
+    .accordion-header:hover { color:var(--bronze); }
+    .accordion-chevron { font-size:18px; transition:transform 0.4s ease; color:var(--bronze); }
+    .accordion-item.open .accordion-chevron { transform:rotate(45deg); }
+    .accordion-body { max-height:0; overflow:hidden; transition:max-height 0.5s ease; }
+    .accordion-body-inner { padding:0 0 20px; font-size:12px; color:var(--text-secondary); line-height:1.8; }
+
+    /* ═══════════ CROSS-SELL ═══════════ */
+    .cross-sell { padding:0 6vw 120px; }
+    .cross-sell h2 { font-family:var(--serif); font-size:clamp(40px,5vw,72px); font-weight:300; margin-bottom:40px; font-variation-settings:"opsz" var(--font-opsz),"SOFT" var(--font-soft),"WONK" var(--font-wonk); }
+    .cross-sell h2 em { font-style:italic; color:var(--bronze); }
+    .cross-grid { display:flex; gap:24px; overflow-x:auto; scroll-snap-type:x mandatory; padding-bottom:10px; }
+    .cross-card { flex:0 0 320px; scroll-snap-align:start; background:var(--bg-secondary); border-radius:4px; overflow:hidden; border:0.5px solid var(--border-subtle); transition:transform 0.4s ease; cursor:none; }
+    .cross-card:hover { transform:translateY(-6px); }
+    .cross-img { height:280px; background:var(--bg-secondary); display:flex; align-items:center; justify-content:center; overflow:hidden; }
+    .cross-img img { width:100%; height:100%; object-fit:cover; }
+    .cross-info { padding:16px; }
+    .cross-name { font-family:var(--serif); font-size:20px; margin-bottom:4px; font-variation-settings:"opsz" 24,"SOFT" 30,"WONK" 0; }
+    .cross-price { font-family:var(--serif); font-size:18px; margin-bottom:12px; }
+    .cross-cta { font-size:10px; letter-spacing:0.3em; text-transform:uppercase; color:var(--bronze); }
+
+    /* ═══════════ FOOTER ═══════════ */
+    footer { padding:80px 6vw 40px; border-top:0.5px solid var(--border-subtle); }
+    .footer-hero { font-family:var(--serif); font-size:clamp(50px,10vw,140px); font-weight:300; line-height:0.9; letter-spacing:-0.03em; margin-bottom:40px; background:linear-gradient(180deg,var(--bone) 0%,rgba(212,165,116,0.3) 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; font-variation-settings:"opsz" var(--font-opsz),"SOFT" 30,"WONK" 1; }
+    .footer-grid { display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:40px; padding-bottom:40px; border-bottom:0.5px solid var(--border-subtle); }
+    .footer-col h4{font-size:9px;letter-spacing:0.4em;text-transform:uppercase;color:var(--bronze);margin-bottom:16px;}
+    .footer-col ul{list-style:none;font-size:12px;line-height:2.2;}
+    .footer-col a{opacity:0.65;transition:opacity 0.3s;}
+    .footer-col a:hover{opacity:1;}
+    .footer-newsletter p{font-size:12px;color:var(--text-secondary);line-height:1.6;margin-bottom:16px;}
+    .footer-newsletter form{display:flex;border-bottom:1px solid var(--border-subtle);}
+    .footer-newsletter input{flex:1;background:transparent;border:none;padding:10px 0;color:var(--bone);font-family:inherit;font-size:12px;outline:none;}
+    .footer-newsletter button{background:transparent;border:none;color:var(--bronze);font-size:10px;letter-spacing:0.3em;text-transform:uppercase;cursor:none;padding:10px 0 10px 16px;white-space:nowrap;}
+    .footer-bottom{padding-top:30px;display:flex;justify-content:space-between;font-size:9px;letter-spacing:0.3em;text-transform:uppercase;color:var(--text-tertiary);flex-wrap:wrap;gap:16px;}
+    .footer-quote{font-style:italic;font-family:var(--serif);font-size:11px;letter-spacing:0.05em;text-transform:none;color:var(--text-secondary);max-width:400px;line-height:1.5;font-variation-settings:"opsz" 14,"SOFT" 50,"WONK" 1;}
+
+    /* ═══════════ REVEAL ═══════════ */
+    .reveal { opacity:0; transform:translateY(30px); transition:opacity 1s cubic-bezier(0.22,1,0.36,1),transform 1s cubic-bezier(0.22,1,0.36,1); }
+    .reveal.in { opacity:1; transform:translateY(0); }
+
+    /* ═══════════ RESPONSIVE ═══════════ */
+    @media(max-width:768px){
+      nav{padding:16px 20px;} nav.scrolled{padding:12px 20px;}
+      .nav-links{display:none;}
+      .hero-product{flex-direction:column; min-height:auto;}
+      .hero-left{height:60vh; border-right:none;}
+      .hero-right{padding:40px 5vw;}
+      .anatomy{flex-direction:column; padding:80px 5vw;}
+      .materials-grid{grid-template-columns:1fr;}
+      .gallery-grid{grid-template-columns:1fr;}
+      .g-item-lg,.g-item-sm,.g-item-md,.g-item-wide{grid-column:span 1; height:300px;}
+      .footer-grid{grid-template-columns:1fr 1fr;}
+      .cross-grid{flex-wrap:nowrap; overflow-x:auto;}
+      .timeline{padding-left:50px;}
+      .step-num{font-size:50px; width:50px; margin-left:-50px; padding-right:10px;}
+    }
+  </style>
+</head>
+<body class="theme-origine">
+
+  <!-- ═══════════ SCROLL PROGRESS + COUNTER ═══════════ -->
+  <div id="scrollProgress"></div>
+  <div id="sectionCounter"><span>01</span> / 07</div>
+
+  <!-- ═══════════ CURSOR ═══════════ -->
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- ═══════════ NAVIGATION ═══════════ -->
+  <nav id="nav">
+    <div class="nav-logo">KORÉ</div>
+    <ul class="nav-links">
+      <li><a href="index.html">Collection</a></li>
+      <li><a href="index.html#manifesto">Manifeste</a></li>
+      <li><a href="index.html#atelier">Atelier</a></li>
+      <li><a href="index.html#contact">Contact</a></li>
+    </ul>
+    <div class="nav-row">
+      <button class="theme-toggle-btn" id="themeToggleBtn">⟡ Thème</button>
+      <div class="nav-cart">Panier <span class="dot"></span> <span id="cartCount">0</span></div>
+    </div>
+  </nav>
+
+  <!-- THEME PANEL -->
+  <div class="theme-panel" id="themePanel">
+    <h4>Palettes chromatiques</h4>
+    <div class="theme-option active" data-theme="origine"><div class="theme-swatch swatch-origine"></div> L'Origine</div>
+    <div class="theme-option" data-theme="laterite"><div class="theme-swatch swatch-laterite"></div> Latérite</div>
+    <div class="theme-option" data-theme="indigo"><div class="theme-swatch swatch-indigo"></div> Indigo</div>
+    <div class="theme-option" data-theme="ivoire"><div class="theme-swatch swatch-ivoire"></div> Ivoire</div>
+    <div class="theme-option" data-theme="obsidienne"><div class="theme-swatch swatch-obsidienne"></div> Obsidienne</div>
+  </div>
+
+  <!-- ═══════════ SECTION 1 : HERO PRODUIT ═══════════ -->
+  <div class="section-meta">
+    <span class="section-number">N.01</span><span>KORÉ 001 · L'ORIGINE · 5.3600° N, 4.0083° W</span><span>2026</span>
+  </div>
+  <div class="section-rule"></div>
+
+  <section class="hero-product" id="heroProduct">
+    <div class="hero-left">
+      <div class="hero-video-wrap" id="heroVideoWrap">
+        <video id="hero360Video" autoplay loop muted playsinline preload="auto"
+          src="assets/products/kore-001-360.mp4"
+          onerror="this.parentElement.querySelector('.hero-video-fallback').style.display='flex'; this.style.display='none';">
+        </video>
+        <div class="hero-video-fallback" style="display:none;"></div>
+        <div class="zoom-hint">✦ Zoomer</div>
+      </div>
+      <div class="thumbnails">
+        <div class="thumb active" data-view="360">360°</div>
+        <div class="thumb" data-view="front"><img src="assets/products/kore-001-front.jpg" onerror="this.style.display='none';this.parentElement.textContent='Avant';" alt="Vue avant"></div>
+        <div class="thumb" data-view="back"><img src="assets/products/kore-001-back.jpg" onerror="this.style.display='none';this.parentElement.textContent='Arrière';" alt="Vue arrière"></div>
+        <div class="thumb" data-view="heel"><img src="assets/products/kore-001-heel.jpg" onerror="this.style.display='none';this.parentElement.textContent='Talon';" alt="Détail talon"></div>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="product-details">
+        <div class="product-tag">Nº 001 · L'ORIGINE · ÉDITION LIMITÉE 200</div>
+        <h1 class="product-title">KORÉ <em style="font-style:italic;color:var(--bronze);">001</em></h1>
+        <div class="product-subtitle">L'origine</div>
+        <p class="product-desc">Corde indigo tressée à la main. Semelle en pierre bronze coulée à Abidjan. Glyphes Nsibidi gravés au fer. Une paire née du continent, sculptée pour ceux qui marchent vers ce qui n'existe pas encore.</p>
+        <div class="price">€ 890</div>
+        <div class="price-note">TTC · Livraison offerte au-delà de 500€</div>
+
+        <div class="color-swatches">
+          <div class="color-swatch swatch-indigo-color active" data-color="indigo"></div>
+          <div class="color-swatch swatch-noir" data-color="noir"></div>
+          <div class="color-swatch swatch-vermillon" data-color="vermillon"></div>
+        </div>
+
+        <div class="size-label"><span>Sélectionner une taille</span> <span style="color:var(--bronze);">Guide des tailles →</span></div>
+        <div class="size-grid" id="sizeGrid">
+          <button class="size-btn">39</button>
+          <button class="size-btn">40</button>
+          <button class="size-btn">41</button>
+          <button class="size-btn soldout">42</button>
+          <button class="size-btn">43</button>
+          <button class="size-btn">44</button>
+          <button class="size-btn soldout">45</button>
+          <button class="size-btn">46</button>
+        </div>
+
+        <button class="btn-primary" id="addToCartBtn">Ajouter au panier</button>
+        <button class="btn-secondary">◈ Retenir cette paire</button>
+
+        <div class="benefits">
+          <span>◈ Livraison offerte</span>
+          <span>⌇ Édition limitée</span>
+          <span>✦ Numérotée à la main</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NOTIFICATION -->
+  <div class="cart-notification" id="cartNotification">◈ Ajouté au panier</div>
+
+  <!-- ═══════════ SECTION 2 : STORY BAR ═══════════ -->
+  <div class="section-rule"></div>
+  <div class="section-meta">
+    <span class="section-number">N.02</span><span>L'essence en mouvement</span><span>⌇</span>
+  </div>
+  <div class="story-bar">
+    <div class="story-track">
+      <span>Édition limitée</span><span class="story-sep">◈</span>
+      <span>200 paires</span><span class="story-sep">◈</span>
+      <span>Numérotée à la main</span><span class="story-sep">◈</span>
+      <span>Née à Abidjan</span><span class="story-sep">◈</span>
+      <span>2026</span><span class="story-sep">◈</span>
+      <span>Corde indigo</span><span class="story-sep">◈</span>
+      <span>Semelle bronze</span><span class="story-sep">◈</span>
+      <span>Glyphes Nsibidi</span><span class="story-sep">◈</span>
+      <span>Édition limitée</span><span class="story-sep">◈</span>
+      <span>200 paires</span><span class="story-sep">◈</span>
+      <span>Numérotée à la main</span><span class="story-sep">◈</span>
+      <span>Née à Abidjan</span><span class="story-sep">◈</span>
+      <span>2026</span><span class="story-sep">◈</span>
+      <span>Corde indigo</span><span class="story-sep">◈</span>
+      <span>Semelle bronze</span><span class="story-sep">◈</span>
+      <span>Glyphes Nsibidi</span>
+    </div>
+  </div>
+
+  <!-- ═══════════ SECTION 3 : ANATOMIE ═══════════ -->
+  <div class="section-rule"></div>
+  <div class="section-meta">
+    <span class="section-number">N.03</span><span>Anatomie · Vue éclatée</span><span>¶</span>
+  </div>
+  <section class="anatomy reveal" id="anatomy">
+    <div class="anatomy-left">
+      <div class="anatomy-img" id="anatomyImgContainer">
+        <img src="assets/products/kore-001-exploded.jpg" alt="Vue éclatée KORÉ 001"
+          onerror="this.style.display='none';this.parentElement.querySelector('.anatomy-placeholder').style.display='flex';">
+        <div class="anatomy-placeholder" style="display:none;">
+          <div class="hotspot-line"><div class="hotspot-dot"></div><span class="hotspot-label">Cordelette indigo</span></div>
+          <div class="hotspot-line"><div class="hotspot-dot"></div><span class="hotspot-label">Empeigne tressée</span></div>
+          <div class="hotspot-line"><div class="hotspot-dot"></div><span class="hotspot-label">Semelle intermédiaire bronze</span></div>
+          <div class="hotspot-line"><div class="hotspot-dot"></div><span class="hotspot-label">Semelle extérieure obsidienne</span></div>
+          <div class="hotspot-line"><div class="hotspot-dot"></div><span class="hotspot-label">Plaque talon Nsibidi</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="anatomy-right">
+      <h2>L'ANATOMIE</h2>
+      <p>Chaque KORÉ 001 est construite comme un pont entre les techniques ancestrales et l'ingénierie contemporaine. La corde indigo, teinte selon un procédé bogolan transmis depuis des générations, s'enroule autour du pied en un seul geste ininterrompu.</p>
+      <p>La semelle en bronze n'est pas un ornement : c'est une fondation. Coulée dans un moule sculpté à la main à Abidjan, elle porte les glyphes Nsibidi — un système d'écriture qui précède l'alphabet latin de plusieurs siècles.</p>
+      <p>L'ensemble respire. La chaussure se patine avec le temps, comme une sculpture vivante. Chaque marque, chaque trace raconte une histoire : la vôtre.</p>
+    </div>
+  </section>
+
+  <!-- ═══════════ SECTION 4 : MATÉRIAUX ═══════════ -->
+  <div class="section-rule"></div>
+  <div class="section-meta">
+    <span class="section-number">N.04</span><span>Matières premières</span><span>✦</span>
+  </div>
+  <section class="materials reveal">
+    <h2>Les <em>matières</em></h2>
+    <div class="materials-grid">
+      <div class="mat-card">
+        <div class="mat-img">
+          <img src="assets/products/materials/kore-001-mat-1.jpg" alt="Corde indigo"
+            onerror="this.style.display='none';this.parentElement.querySelector('.mat-placeholder').style.display='block';">
+          <div class="mat-placeholder" style="display:none;"></div>
+        </div>
+        <div class="mat-info">
+          <div class="mat-name">CORDE INDIGO</div>
+          <div class="mat-desc">100% coton bogolan tissé main. Teinture naturelle à l'indigo fermenté.</div>
+          <div class="mat-origin">Bouaké, Côte d'Ivoire</div>
+        </div>
+      </div>
+      <div class="mat-card">
+        <div class="mat-img">
+          <img src="assets/products/materials/kore-001-mat-2.jpg" alt="Bronze oxydé"
+            onerror="this.style.display='none';this.parentElement.querySelector('.mat-placeholder').style.display='block';">
+          <div class="mat-placeholder" style="display:none;"></div>
+        </div>
+        <div class="mat-info">
+          <div class="mat-name">BRONZE OXYDÉ</div>
+          <div class="mat-desc">Alliage de cuivre et d'étain. Patine naturelle au fil des mois.</div>
+          <div class="mat-origin">Coulé à Abidjan</div>
+        </div>
+      </div>
+      <div class="mat-card">
+        <div class="mat-img">
+          <img src="assets/products/materials/kore-001-mat-3.jpg" alt="Glyphes Nsibidi"
+            onerror="this.style.display='none';this.parentElement.querySelector('.mat-placeholder').style.display='block';">
+          <div class="mat-placeholder" style="display:none;"></div>
+        </div>
+        <div class="mat-info">
+          <div class="mat-name">GLYPHES NSIBIDI</div>
+          <div class="mat-desc">Gravure au laser fidèle aux symboles sacrés du Nigeria ancien.</div>
+          <div class="mat-origin">Gravé à la main</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ SECTION 5 : RITUEL ═══════════ -->
+  <div class="section-rule"></div>
+  <div class="section-meta">
+    <span class="section-number">N.05</span><span>Fabrication · 42 heures</span><span>⌇</span>
+  </div>
+  <section class="ritual reveal">
+    <h2>Le <em>rituel</em></h2>
+    <p class="ritual-sub">42 heures de travail par paire. 6 étapes. Une seule main par paire.</p>
+    <div class="timeline">
+      <div class="step"><div class="step-num">01</div><div class="step-content"><div class="step-title">L'écheveau</div><div class="step-desc">Le fil de bogolan est teint à l'indigo naturel, puis séché au soleil pendant trois jours.</div></div><div class="step-img"><img src="assets/products/ritual/kore-001-step-1.jpg" onerror="this.style.display='none';this.parentElement.querySelector('.step-placeholder').style.display='block';"><div class="step-placeholder" style="display:none;"></div></div></div>
+      <div class="step"><div class="step-num">02</div><div class="step-content"><div class="step-title">Le tressage</div><div class="step-desc">Une seule tresse, sans interruption, autour du pied. Le geste est méditatif.</div></div><div class="step-img"><img src="assets/products/ritual/kore-001-step-2.jpg" onerror="this.style.display='none';this.parentElement.querySelector('.step-placeholder').style.display='block';"><div class="step-placeholder" style="display:none;"></div></div></div>
+      <div class="step"><div class="step-num">03</div><div class="step-content"><div class="step-title">La fonte</div><div class="step-desc">Le bronze est coulé dans un moule sculpté à la main. Chaque moule est unique.</div></div><div class="step-img"><img src="assets/products/ritual/kore-001-step-3.jpg" onerror="this.style.display='none';this.parentElement.querySelector('.step-placeholder').style.display='block';"><div class="step-placeholder" style="display:none;"></div></div></div>
+      <div class="step"><div class="step-num">04</div><div class="step-content"><div class="step-title">L'assemblage</div><div class="step-desc">Corde et semelle se rencontrent. Une seule couture, sans colle.</div></div><div class="step-img"><img src="assets/products/ritual/kore-001-step-4.jpg" onerror="this.style.display='none';this.parentElement.querySelector('.step-placeholder').style.display='block';"><div class="step-placeholder" style="display:none;"></div></div></div>
+      <div class="step"><div class="step-num">05</div><div class="step-content"><div class="step-title">La gravure</div><div class="step-desc">Les glyphes Nsibidi sont marqués au fer, un à un, en suivant un rythme ancien.</div></div><div class="step-img"><img src="assets/products/ritual/kore-001-step-5.jpg" onerror="this.style.display='none';this.parentElement.querySelector('.step-placeholder').style.display='block';"><div class="step-placeholder" style="display:none;"></div></div></div>
+      <div class="step"><div class="step-num">06</div><div class="step-content"><div class="step-title">La signature</div><div class="step-desc">Numérotée. Nommée. Datée. Bénie par l'artisan qui l'a créée.</div></div><div class="step-img"><img src="assets/products/ritual/kore-001-step-6.jpg" onerror="this.style.display='none';this.parentElement.querySelector('.step-placeholder').style.display='block';"><div class="step-placeholder" style="display:none;"></div></div></div>
+    </div>
+  </section>
+
+  <!-- ═══════════ SECTION 6 : GALERIE ═══════════ -->
+  <div class="section-rule"></div>
+  <div class="section-meta">
+    <span class="section-number">N.06</span><span>Galerie éditoriale</span><span>⟡</span>
+  </div>
+  <section class="gallery reveal">
+    <h2>En <em>contexte</em></h2>
+    <div class="gallery-grid">
+      <div class="gallery-item g-item-lg"><img src="assets/products/gallery/kore-001-1.jpg" onerror="this.parentElement.innerHTML='<div class=\'g-placeholder\'>◈ Image 1</div>';"></div>
+      <div class="gallery-item g-item-sm"><img src="assets/products/gallery/kore-001-2.jpg" onerror="this.parentElement.innerHTML='<div class=\'g-placeholder\'>◈ Image 2</div>';"></div>
+      <div class="gallery-item g-item-md"><img src="assets/products/gallery/kore-001-3.jpg" onerror="this.parentElement.innerHTML='<div class=\'g-placeholder\'>◈ Image 3</div>';"></div>
+      <div class="gallery-item g-item-md"><img src="assets/products/gallery/kore-001-4.jpg" onerror="this.parentElement.innerHTML='<div class=\'g-placeholder\'>◈ Image 4</div>';"></div>
+      <div class="gallery-item g-item-wide">
+        <video autoplay loop muted playsinline src="assets/products/gallery/kore-001-5.mp4"
+          onerror="this.parentElement.innerHTML='<div class=\'g-placeholder\'>◈ Vidéo contextuelle</div>';"></video>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ SECTION 7 : SPÉCIFICATIONS ═══════════ -->
+  <div class="section-rule"></div>
+  <div class="section-meta">
+    <span class="section-number">N.07</span><span>Spécifications techniques</span><span>§</span>
+  </div>
+  <section class="specs reveal">
+    <h2>Spécifications</h2>
+    <div class="accordion">
+      <div class="accordion-item"><button class="accordion-header">Détails techniques <span class="accordion-chevron">⟡</span></button><div class="accordion-body"><div class="accordion-body-inner">Poids : 380g (taille 42). Hauteur de semelle : 28mm. Drop : 14mm. Construction : corde tressée main + semelle bronze coulé.</div></div></div>
+      <div class="accordion-item"><button class="accordion-header">Matériaux et provenance <span class="accordion-chevron">⟡</span></button><div class="accordion-body"><div class="accordion-body-inner">Corde : 100% coton bogolan, Bouaké. Semelle : alliage bronze, Abidjan. Gravure : laser sur bronze. Tous les matériaux sont sourcés en Afrique de l'Ouest.</div></div></div>
+      <div class="accordion-item"><button class="accordion-header">Guide des tailles et pointures <span class="accordion-chevron">⟡</span></button><div class="accordion-body"><div class="accordion-body-inner">Chaussez votre taille habituelle. La corde s'adapte au pied avec le temps. Demi-pointures : prenez la taille au-dessus. Un guide détaillé est disponible sur demande.</div></div></div>
+      <div class="accordion-item"><button class="accordion-header">Entretien et longévité <span class="accordion-chevron">⟡</span></button><div class="accordion-body"><div class="accordion-body-inner">La corde se patine naturellement. Nettoyage à sec recommandé. La semelle bronze s'oxyde lentement, révélant une patine unique. Conserver à l'abri de l'humidité prolongée.</div></div></div>
+      <div class="accordion-item"><button class="accordion-header">Livraison, retours et garantie <span class="accordion-chevron">⟡</span></button><div class="accordion-body"><div class="accordion-body-inner">Livraison offerte en Europe et en Afrique. Retours sous 30 jours. Garantie 2 ans sur la structure, 1 an sur la corde. Chaque paire est numérotée et enregistrée.</div></div></div>
+    </div>
+  </section>
+
+  <!-- ═══════════ SECTION 8 : CROSS-SELL ═══════════ -->
+  <div class="section-rule"></div>
+  <div class="section-meta">
+    <span class="section-number">N.08</span><span>La lignée</span><span>✦</span>
+  </div>
+  <section class="cross-sell reveal">
+    <h2>Continuer <em>la lignée</em></h2>
+    <div class="cross-grid">
+      <div class="cross-card" onclick="window.location.href='kore-002.html'">
+        <div class="cross-img"><img src="assets/products/kore-002.jpg" onerror="this.style.display='none';this.parentElement.style.background='radial-gradient(circle at 50% 50%,rgba(212,165,116,0.1),transparent)';"><div class="mat-placeholder" style="display:none;"></div></div>
+        <div class="cross-info"><div class="cross-name">KORÉ <em style="color:var(--bronze);">002</em></div><div class="cross-price">€ 940</div><div class="cross-cta">Voir →</div></div>
+      </div>
+      <div class="cross-card" onclick="window.location.href='kore-003.html'">
+        <div class="cross-img"><img src="assets/products/kore-003.jpg" onerror="this.style.display='none';this.parentElement.style.background='radial-gradient(circle at 50% 50%,rgba(212,165,116,0.1),transparent)';"></div>
+        <div class="cross-info"><div class="cross-name">KORÉ <em style="color:var(--bronze);">003</em></div><div class="cross-price">€ 820</div><div class="cross-cta">Voir →</div></div>
+      </div>
+      <div class="cross-card" onclick="window.location.href='kore-004.html'">
+        <div class="cross-img"><img src="assets/products/kore-004.jpg" onerror="this.style.display='none';this.parentElement.style.background='radial-gradient(circle at 50% 50%,rgba(212,165,116,0.1),transparent)';"></div>
+        <div class="cross-info"><div class="cross-name">KORÉ <em style="color:var(--bronze);">004</em></div><div class="cross-price">€ 1 100</div><div class="cross-cta">Voir →</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ FOOTER ═══════════ -->
+  <div class="section-rule"></div>
+  <footer>
+    <div class="footer-hero reveal">KORÉ</div>
+    <div class="footer-grid">
+      <div class="footer-col footer-newsletter">
+        <h4>Le cercle</h4><p>Rejoignez les premières annonces. Drops limités, coulisses de l'atelier, textes exclusifs.</p>
+        <form onsubmit="event.preventDefault();alert('Inscrit au cercle KORÉ');"><input type="email" placeholder="votre.email@exemple.com" required><button type="submit">Prendre place †</button></form>
+      </div>
+      <div class="footer-col"><h4>Maison</h4><ul><li><a href="index.html">Collection</a></li><li><a href="#">Éditions limitées</a></li><li><a href="#">Archive</a></li></ul></div>
+      <div class="footer-col"><h4>Atelier</h4><ul><li><a href="#">Notre histoire</a></li><li><a href="#">Artisans</a></li><li><a href="#">Presse</a></li></ul></div>
+      <div class="footer-col"><h4>Soutien</h4><ul><li><a href="#">Livraison</a></li><li><a href="#">Guide des tailles</a></li><li><a href="#">Contact</a></li></ul></div>
+    </div>
+    <div class="footer-bottom">
+      <div>© 2026 KORÉ · Abidjan · Tous droits réservés</div>
+      <div class="footer-quote" id="footerQuote"></div>
+    </div>
+  </footer>
+
+  <script>
+    (function(){
+      /* FOOTER QUOTES */
+      const quotes=["« Le passé ne précède pas le futur — il le tresse. »","« Chaque pas est une archive du chemin. »","« Nous ne marchons pas sur la terre, nous la prolongeons. »","« Ce qui est porté devient mémoire. »"];
+      document.getElementById('footerQuote').textContent=quotes[Math.floor(Math.random()*quotes.length)];
+
+      /* CURSOR */
+      const cursor=document.getElementById('cursor'), ring=document.getElementById('cursorRing');
+      let mx=0,my=0,rx=0,ry=0;
+      document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cursor.style.left=mx+'px';cursor.style.top=my+'px';});
+      function animRing(){rx+=(mx-rx)*0.12;ry+=(my-ry)*0.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(animRing);} animRing();
+      document.addEventListener('mousedown',()=>ring.classList.add('click'));
+      document.addEventListener('mouseup',()=>ring.classList.remove('click'));
+      document.querySelectorAll('a,button,.product-card,.nav-links li,.thumb,.size-btn,.accordion-header,.theme-option,.cross-card,.mat-card').forEach(el=>{
+        el.addEventListener('mouseenter',()=>{cursor.classList.add('hover');ring.classList.add('hover');});
+        el.addEventListener('mouseleave',()=>{cursor.classList.remove('hover');ring.classList.remove('hover');});
+      });
+
+      /* NAV SCROLL */
+      const nav=document.getElementById('nav');
+      window.addEventListener('scroll',()=>{
+        nav.classList.toggle('scrolled',window.scrollY>80);
+        updateProgress();updateCounter();
+      });
+
+      /* SCROLL PROGRESS */
+      function updateProgress(){const bar=document.getElementById('scrollProgress');const h=document.documentElement.scrollHeight-window.innerHeight;bar.style.width=h>0?(window.scrollY/h)*100+'%':'0%';}
+
+      /* SECTION COUNTER */
+      const sections=document.querySelectorAll('#heroProduct,.story-bar,#anatomy,.materials,.ritual,.gallery,.specs,.cross-sell,footer');
+      function updateCounter(){const c=document.getElementById('sectionCounter');let cur=1;const mid=window.scrollY+window.innerHeight/2;sections.forEach((s,i)=>{const r=s.getBoundingClientRect();if(mid>=r.top+window.scrollY&&mid<r.top+window.scrollY+r.height)cur=i+1;});c.querySelector('span').textContent=String(cur).padStart(2,'0');}
+
+      /* REVEAL OBSERVER */
+      const revealObs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');revealObs.unobserve(e.target);}})},{threshold:0.12});
+      document.querySelectorAll('.reveal').forEach(el=>revealObs.observe(el));
+
+      /* THUMBNAILS */
+      document.querySelectorAll('.thumb').forEach(t=>{t.addEventListener('click',function(){document.querySelectorAll('.thumb').forEach(x=>x.classList.remove('active'));this.classList.add('active');});});
+
+      /* SIZE SELECTOR */
+      document.getElementById('sizeGrid').addEventListener('click',e=>{if(e.target.classList.contains('size-btn')&&!e.target.classList.contains('soldout')){document.querySelectorAll('.size-btn').forEach(b=>b.classList.remove('selected'));e.target.classList.add('selected');}});
+
+      /* COLOR SWATCHES */
+      document.querySelectorAll('.color-swatch').forEach(s=>{s.addEventListener('click',function(){document.querySelectorAll('.color-swatch').forEach(x=>x.classList.remove('active'));this.classList.add('active');});});
+
+      /* ADD TO CART */
+      let cartCount=0;
+      document.getElementById('addToCartBtn').addEventListener('click',()=>{
+        const selectedSize=document.querySelector('.size-btn.selected');
+        if(!selectedSize){alert('Veuillez sélectionner une taille.');return;}
+        cartCount++; document.getElementById('cartCount').textContent=cartCount;
+        const notif=document.getElementById('cartNotification');
+        notif.classList.add('show'); setTimeout(()=>notif.classList.remove('show'),2500);
+        document.getElementById('heroVideoWrap').style.transform='scale(1.02)';
+        setTimeout(()=>document.getElementById('heroVideoWrap').style.transform='',400);
+      });
+
+      /* ACCORDIONS */
+      document.querySelectorAll('.accordion-header').forEach(btn=>{
+        btn.addEventListener('click',function(){
+          const item=this.parentElement; const isOpen=item.classList.contains('open');
+          document.querySelectorAll('.accordion-item').forEach(i=>{i.classList.remove('open');i.querySelector('.accordion-body').style.maxHeight='0';});
+          if(!isOpen){item.classList.add('open');item.querySelector('.accordion-body').style.maxHeight=item.querySelector('.accordion-body-inner').scrollHeight+'px';}
+        });
+      });
+
+      /* THEME SWITCHER (même clé localStorage que l'index) */
+      const body=document.body;
+      const themePanel=document.getElementById('themePanel');
+      const themeToggleBtn=document.getElementById('themeToggleBtn');
+      const saved=localStorage.getItem('kore-theme');
+      if(saved&&['origine','laterite','indigo','ivoire','obsidienne'].includes(saved)) applyTheme(saved);
+      function applyTheme(n){body.className='theme-'+n;localStorage.setItem('kore-theme',n);document.querySelectorAll('.theme-option').forEach(o=>o.classList.toggle('active',o.dataset.theme===n));}
+      themeToggleBtn.addEventListener('click',e=>{e.stopPropagation();themePanel.classList.toggle('open');});
+      document.querySelectorAll('.theme-option').forEach(o=>{o.addEventListener('click',e=>{applyTheme(e.currentTarget.dataset.theme);themePanel.classList.remove('open');});});
+      document.addEventListener('click',e=>{if(themePanel.classList.contains('open')&&!themePanel.contains(e.target)&&e.target!==themeToggleBtn)themePanel.classList.remove('open');});
+      const curTheme=body.className.replace('theme-','')||'origine';
+      document.querySelectorAll('.theme-option').forEach(o=>o.classList.toggle('active',o.dataset.theme===curTheme));
+
+      updateProgress();updateCounter();
+    })();
+  </script>
+</body>
+</html>
