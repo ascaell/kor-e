@@ -3,28 +3,64 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>KORÉ — L'origine</title>
+<title>KORÉ — L'origine sculptée</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  html, body { height: 100%; background: #000; overflow: hidden; font-family: 'Inter', -apple-system, sans-serif; color: #F5EFE6; }
+  :root {
+    --bone: #F5EFE6;
+    --bronze: #D4A574;
+    --bronze-deep: #8B6F47;
+    --indigo: #1E2A5C;
+    --pink: #E88AAA;
+    --obsidian: #050505;
+    --laterite: #8B3A1F;
+    --serif: 'Times New Roman', 'Playfair Display', serif;
+    --sans: 'Inter', -apple-system, sans-serif;
+  }
+  html, body { background: var(--obsidian); color: var(--bone); font-family: var(--sans); overflow-x: hidden; }
+  body { cursor: none; }
+  a { color: inherit; text-decoration: none; }
+  ::selection { background: var(--bronze); color: var(--obsidian); }
 
+  /* ═══════════════ CUSTOM CURSOR ═══════════════ */
+  .cursor {
+    position: fixed;
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    background: var(--bronze);
+    pointer-events: none;
+    z-index: 9999;
+    mix-blend-mode: difference;
+    transition: transform 0.15s ease, width 0.3s ease, height 0.3s ease;
+    transform: translate(-50%, -50%);
+  }
+  .cursor-ring {
+    position: fixed;
+    width: 40px; height: 40px;
+    border: 1px solid var(--bronze);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), width 0.3s ease, height 0.3s ease, opacity 0.3s ease;
+    transform: translate(-50%, -50%);
+    opacity: 0.6;
+  }
+  .cursor.hover { transform: translate(-50%, -50%) scale(0.5); }
+  .cursor-ring.hover { width: 80px; height: 80px; opacity: 1; }
+
+  /* ═══════════════ INTRO ═══════════════ */
   .intro {
     position: fixed; inset: 0;
-    background: #000;
-    z-index: 100;
+    background: var(--obsidian);
+    z-index: 200;
     overflow: hidden;
-    cursor: pointer;
   }
-
   .elephant-video {
-    position: absolute;
-    inset: 0;
-    width: 100vw;
-    height: 100vh;
+    position: absolute; inset: 0;
+    width: 100vw; height: 100vh;
     object-fit: cover;
     z-index: 1;
   }
-
   .vignette {
     position: absolute; inset: 0;
     background:
@@ -33,7 +69,6 @@
     z-index: 2;
     pointer-events: none;
   }
-
   .grain {
     position: absolute; inset: 0;
     background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.35'/></svg>");
@@ -42,7 +77,6 @@
     mix-blend-mode: overlay;
     z-index: 3;
   }
-
   .corner {
     position: absolute;
     top: 30px; left: 40px;
@@ -54,144 +88,702 @@
     animation: fadeIn 1.5s ease 1s forwards;
   }
   .corner-right { left: auto; right: 40px; }
-
-  .wordmark {
-    position: absolute;
-    bottom: 8vh;
-    left: 50%;
+  .wordmark-intro {
+    position: absolute; bottom: 8vh; left: 50%;
     transform: translateX(-50%);
-    z-index: 6;
-    text-align: center;
-    opacity: 0;
-    animation: fadeIn 2s ease 3s forwards;
+    z-index: 6; text-align: center;
+    opacity: 0; animation: fadeIn 2s ease 3s forwards;
   }
-  .wordmark h1 {
-    font-family: 'Times New Roman', serif;
+  .wordmark-intro h1 {
+    font-family: var(--serif);
     font-size: clamp(60px, 9vw, 140px);
-    font-weight: 300;
-    letter-spacing: 0.18em;
-    line-height: 1;
-    background: linear-gradient(180deg, #F5EFE6 0%, #D4A574 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    font-weight: 300; letter-spacing: 0.18em; line-height: 1;
+    background: linear-gradient(180deg, var(--bone) 0%, var(--bronze) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     background-clip: text;
   }
-  .tagline {
-    margin-top: 12px;
-    font-size: 11px;
-    letter-spacing: 0.5em;
-    text-transform: uppercase;
+  .tagline-intro {
+    margin-top: 12px; font-size: 11px;
+    letter-spacing: 0.5em; text-transform: uppercase;
     color: rgba(245, 239, 230, 0.7);
   }
-
   .skip-hint {
-    position: absolute;
-    bottom: 30px; right: 40px;
-    z-index: 10;
-    font-size: 11px;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
+    position: absolute; bottom: 30px; right: 40px;
+    z-index: 10; font-size: 11px;
+    letter-spacing: 0.3em; text-transform: uppercase;
     color: rgba(245, 239, 230, 0.6);
     display: flex; align-items: center; gap: 12px;
-    opacity: 0;
-    animation: fadeIn 1s ease 2s forwards;
-    cursor: pointer;
-    transition: color 0.3s ease;
+    opacity: 0; animation: fadeIn 1s ease 2s forwards;
   }
-  .skip-hint:hover { color: #D4A574; }
+  .skip-hint:hover { color: var(--bronze); }
   .skip-hint kbd {
-    display: inline-block;
-    padding: 4px 10px;
+    display: inline-block; padding: 4px 10px;
     border: 1px solid rgba(245, 239, 230, 0.4);
-    border-radius: 4px;
-    font-family: inherit;
-    font-size: 10px;
-    letter-spacing: 0.2em;
+    border-radius: 4px; font-family: inherit; font-size: 10px;
   }
-
   .sound-gate {
-    position: absolute;
-    top: 30px; left: 50%;
-    transform: translateX(-50%);
-    z-index: 20;
-    padding: 12px 24px;
-    background: rgba(0, 0, 0, 0.6);
+    position: absolute; top: 30px; left: 50%;
+    transform: translateX(-50%); z-index: 20;
+    padding: 12px 24px; background: rgba(0,0,0,0.6);
     backdrop-filter: blur(10px);
     border: 1px solid rgba(212, 165, 116, 0.5);
-    color: #D4A574;
-    font-size: 11px;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    cursor: pointer;
-    font-family: inherit;
-    transition: all 0.3s ease;
-    display: none;
+    color: var(--bronze); font-size: 11px;
+    letter-spacing: 0.3em; text-transform: uppercase;
+    font-family: inherit; display: none;
   }
   .sound-gate.show { display: block; animation: fadeIn 0.6s ease forwards; }
-  .sound-gate:hover { background: #D4A574; color: #000; }
+  .sound-gate:hover { background: var(--bronze); color: var(--obsidian); }
 
   @keyframes fadeIn { to { opacity: 1; } }
+
+  /* ═══════════════ NAV ═══════════════ */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 24px 48px;
+    display: flex; justify-content: space-between; align-items: center;
+    mix-blend-mode: difference;
+    transition: padding 0.4s ease;
+  }
+  nav.scrolled { padding: 16px 48px; }
+  .nav-logo {
+    font-family: var(--serif);
+    font-size: 22px; font-weight: 400;
+    letter-spacing: 0.25em;
+    color: var(--bone);
+  }
+  .nav-links {
+    display: flex; gap: 40px;
+    list-style: none;
+    font-size: 11px; letter-spacing: 0.3em;
+    text-transform: uppercase;
+  }
+  .nav-links li { position: relative; }
+  .nav-links a { color: var(--bone); opacity: 0.8; transition: opacity 0.3s; }
+  .nav-links a:hover { opacity: 1; }
+  .nav-cart {
+    font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .nav-cart .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--bronze);
+  }
+
+  /* ═══════════════ HERO ═══════════════ */
+  .hero {
+    position: relative;
+    height: 100vh; width: 100%;
+    overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .hero-video {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover; z-index: 1;
+  }
+  .hero-video-fallback {
+    position: absolute; inset: 0; z-index: 1;
+    background:
+      radial-gradient(ellipse at 30% 40%, rgba(232, 138, 170, 0.15) 0%, transparent 50%),
+      radial-gradient(ellipse at 70% 60%, rgba(212, 165, 116, 0.12) 0%, transparent 50%),
+      var(--obsidian);
+  }
+  .hero-overlay {
+    position: absolute; inset: 0; z-index: 2;
+    background: linear-gradient(180deg, rgba(0,0,0,0.4) 0%, transparent 30%, transparent 60%, rgba(0,0,0,0.8) 100%);
+  }
+  .hero-content {
+    position: relative; z-index: 3;
+    text-align: center;
+    padding: 0 40px;
+  }
+  .hero-eyebrow {
+    font-size: 11px; letter-spacing: 0.5em; text-transform: uppercase;
+    color: var(--bronze); margin-bottom: 32px;
+    opacity: 0;
+    animation: revealUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.3s forwards;
+  }
+  .hero-title {
+    font-family: var(--serif);
+    font-size: clamp(60px, 10vw, 180px);
+    font-weight: 300; line-height: 0.95;
+    letter-spacing: -0.02em;
+    margin-bottom: 32px;
+  }
+  .hero-title .line {
+    display: block; overflow: hidden;
+  }
+  .hero-title .line span {
+    display: inline-block;
+    transform: translateY(120%);
+    animation: revealUp 1.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+  .hero-title .line:nth-child(1) span { animation-delay: 0.5s; }
+  .hero-title .line:nth-child(2) span { animation-delay: 0.65s; }
+  .hero-title .line:nth-child(2) span {
+    font-style: italic;
+    background: linear-gradient(90deg, var(--bronze) 0%, var(--pink) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  @keyframes revealUp {
+    from { transform: translateY(120%); opacity: 0; }
+    to   { transform: translateY(0); opacity: 1; }
+  }
+  .hero-sub {
+    font-size: 13px; letter-spacing: 0.3em; text-transform: uppercase;
+    color: rgba(245, 239, 230, 0.7);
+    max-width: 500px; margin: 0 auto;
+    opacity: 0;
+    animation: fadeIn 1.5s ease 1.4s forwards;
+  }
+  .hero-scroll {
+    position: absolute; bottom: 40px; left: 50%;
+    transform: translateX(-50%); z-index: 3;
+    font-size: 10px; letter-spacing: 0.4em; text-transform: uppercase;
+    color: rgba(245, 239, 230, 0.5);
+    display: flex; flex-direction: column; align-items: center; gap: 12px;
+    opacity: 0;
+    animation: fadeIn 1s ease 2s forwards;
+  }
+  .hero-scroll .line-anim {
+    width: 1px; height: 60px;
+    background: linear-gradient(to bottom, transparent, var(--bronze));
+    animation: scrollLine 2s ease-in-out infinite;
+  }
+  @keyframes scrollLine {
+    0% { transform: scaleY(0); transform-origin: top; }
+    50% { transform: scaleY(1); transform-origin: top; }
+    51% { transform: scaleY(1); transform-origin: bottom; }
+    100% { transform: scaleY(0); transform-origin: bottom; }
+  }
+
+  /* ═══════════════ MARQUEE ═══════════════ */
+  .marquee {
+    padding: 40px 0;
+    border-top: 1px solid rgba(212, 165, 116, 0.15);
+    border-bottom: 1px solid rgba(212, 165, 116, 0.15);
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .marquee-track {
+    display: inline-block;
+    animation: scroll 30s linear infinite;
+    font-family: var(--serif);
+    font-size: clamp(40px, 6vw, 80px);
+    font-weight: 300; letter-spacing: -0.01em;
+  }
+  .marquee-track span {
+    display: inline-block;
+    margin: 0 40px;
+    color: var(--bone);
+  }
+  .marquee-track span.italic {
+    font-style: italic;
+    color: var(--bronze);
+  }
+  .marquee-track span.dot::before {
+    content: "◈"; color: var(--bronze); margin-right: 40px;
+  }
+  @keyframes scroll {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  /* ═══════════════ MANIFESTO ═══════════════ */
+  .manifesto {
+    padding: 200px 8vw;
+    position: relative;
+    max-width: 1600px;
+    margin: 0 auto;
+  }
+  .manifesto-label {
+    font-size: 11px; letter-spacing: 0.5em; text-transform: uppercase;
+    color: var(--bronze); margin-bottom: 60px;
+    display: flex; align-items: center; gap: 16px;
+  }
+  .manifesto-label::before {
+    content: ""; width: 40px; height: 1px; background: var(--bronze);
+  }
+  .manifesto-text {
+    font-family: var(--serif);
+    font-size: clamp(32px, 4.5vw, 68px);
+    font-weight: 300; line-height: 1.15;
+    letter-spacing: -0.02em;
+  }
+  .manifesto-text .word {
+    display: inline-block;
+    opacity: 0.15;
+    transition: opacity 0.6s ease, color 0.6s ease;
+  }
+  .manifesto-text .word.visible {
+    opacity: 1;
+  }
+  .manifesto-text .highlight.visible {
+    color: var(--bronze); font-style: italic;
+  }
+
+  /* ═══════════════ PRODUCTS ═══════════════ */
+  .products-section {
+    padding: 120px 6vw 200px;
+    position: relative;
+  }
+  .products-header {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    margin-bottom: 80px;
+    flex-wrap: wrap; gap: 40px;
+  }
+  .products-title {
+    font-family: var(--serif);
+    font-size: clamp(48px, 7vw, 96px);
+    font-weight: 300; line-height: 1;
+    letter-spacing: -0.02em;
+  }
+  .products-title em {
+    font-style: italic;
+    background: linear-gradient(90deg, var(--bronze), var(--pink));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .products-meta {
+    font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase;
+    color: rgba(245, 239, 230, 0.5);
+    max-width: 300px; line-height: 2;
+  }
+
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 24px;
+  }
+  .product-card {
+    position: relative;
+    background: #0A0A0A;
+    border-radius: 4px;
+    overflow: hidden;
+    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    cursor: none;
+  }
+  .product-card:hover {
+    transform: translateY(-8px);
+  }
+  .product-card.card-lg { grid-column: span 7; height: 640px; }
+  .product-card.card-sm { grid-column: span 5; height: 640px; }
+  .product-card.card-md { grid-column: span 6; height: 500px; }
+  .product-card.card-wide { grid-column: span 12; height: 400px; }
+
+  @media (max-width: 900px) {
+    .product-card.card-lg, .product-card.card-sm,
+    .product-card.card-md, .product-card.card-wide {
+      grid-column: span 12; height: 500px;
+    }
+  }
+
+  .product-image {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+  .product-image img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: transform 1.2s cubic-bezier(0.22, 1, 0.36, 1), filter 0.6s ease;
+    filter: brightness(0.85);
+  }
+  .product-card:hover .product-image img {
+    transform: scale(1.08);
+    filter: brightness(1);
+  }
+  /* Placeholder when no image */
+  .product-image.placeholder {
+    background:
+      radial-gradient(circle at 50% 60%, rgba(212, 165, 116, 0.15) 0%, transparent 60%),
+      linear-gradient(135deg, #0F0F0F 0%, #1A1414 100%);
+  }
+  .product-image.placeholder::after {
+    content: "";
+    position: absolute;
+    width: 200px; height: 200px;
+    border: 1px solid rgba(212, 165, 116, 0.2);
+    border-radius: 50%;
+    animation: pulse 3s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 0.3; }
+    50%      { transform: scale(1.2); opacity: 0.6; }
+  }
+
+  .product-info {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 32px;
+    z-index: 3;
+    background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 100%);
+  }
+  .product-tag {
+    font-size: 10px; letter-spacing: 0.4em; text-transform: uppercase;
+    color: var(--bronze); margin-bottom: 12px;
+  }
+  .product-name {
+    font-family: var(--serif);
+    font-size: 32px; font-weight: 300;
+    margin-bottom: 8px; letter-spacing: -0.01em;
+  }
+  .product-name em { font-style: italic; color: var(--bronze); }
+  .product-desc {
+    font-size: 12px; color: rgba(245, 239, 230, 0.6);
+    letter-spacing: 0.05em; line-height: 1.6;
+    margin-bottom: 20px; max-width: 380px;
+  }
+  .product-bottom {
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .product-price {
+    font-family: var(--serif); font-size: 24px; font-weight: 400;
+  }
+  .product-cta {
+    font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--bronze);
+    display: flex; align-items: center; gap: 8px;
+    transition: gap 0.3s ease;
+  }
+  .product-card:hover .product-cta { gap: 16px; }
+  .product-cta::after {
+    content: "→"; font-size: 18px;
+  }
+
+  .product-badge {
+    position: absolute; top: 24px; left: 24px;
+    padding: 8px 16px; z-index: 3;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(212, 165, 116, 0.4);
+    border-radius: 4px;
+    font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--bronze);
+  }
+
+  /* ═══════════════ FOOTER ═══════════════ */
+  footer {
+    padding: 120px 6vw 60px;
+    border-top: 1px solid rgba(212, 165, 116, 0.15);
+  }
+  .footer-hero {
+    font-family: var(--serif);
+    font-size: clamp(60px, 12vw, 200px);
+    font-weight: 300; line-height: 0.9;
+    letter-spacing: -0.03em;
+    margin-bottom: 80px;
+    background: linear-gradient(180deg, var(--bone) 0%, rgba(212, 165, 116, 0.3) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 48px;
+    padding-bottom: 60px;
+    border-bottom: 1px solid rgba(212, 165, 116, 0.15);
+  }
+  @media (max-width: 800px) {
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+  }
+  .footer-col h4 {
+    font-size: 10px; letter-spacing: 0.4em; text-transform: uppercase;
+    color: var(--bronze); margin-bottom: 20px;
+  }
+  .footer-col ul { list-style: none; font-size: 13px; line-height: 2.2; }
+  .footer-col a { opacity: 0.7; transition: opacity 0.3s; }
+  .footer-col a:hover { opacity: 1; }
+  .footer-newsletter p {
+    font-size: 13px; color: rgba(245, 239, 230, 0.6);
+    line-height: 1.7; margin-bottom: 20px;
+  }
+  .footer-newsletter form {
+    display: flex; border-bottom: 1px solid rgba(212, 165, 116, 0.3);
+  }
+  .footer-newsletter input {
+    flex: 1; background: transparent; border: none;
+    padding: 12px 0; color: var(--bone);
+    font-family: inherit; font-size: 13px; outline: none;
+  }
+  .footer-newsletter button {
+    background: transparent; border: none;
+    color: var(--bronze); font-size: 11px;
+    letter-spacing: 0.3em; text-transform: uppercase;
+    cursor: none; padding: 12px 0 12px 20px;
+  }
+  .footer-bottom {
+    padding-top: 40px;
+    display: flex; justify-content: space-between;
+    font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase;
+    color: rgba(245, 239, 230, 0.4);
+    flex-wrap: wrap; gap: 20px;
+  }
+
+  /* ═══════════════ REVEAL ANIMATIONS ═══════════════ */
+  .reveal {
+    opacity: 0;
+    transform: translateY(60px);
+    transition: opacity 1.2s cubic-bezier(0.22, 1, 0.36, 1), transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .reveal.in {
+    opacity: 1;
+    transform: translateY(0);
+  }
 </style>
 </head>
 <body>
 
-<div class="intro" id="intro">
+<!-- CURSOR -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
 
+<!-- INTRO -->
+<div class="intro" id="intro">
   <video id="elephantVideo" class="elephant-video" autoplay loop muted playsinline>
     <source src="assets/elephant-loop.mp4" type="video/mp4">
   </video>
-
   <div class="vignette"></div>
   <div class="grain"></div>
-
   <div class="corner">EST. 2026 — ABIDJAN</div>
   <div class="corner corner-right">KORÉ 001 / L'ORIGINE</div>
-
   <button class="sound-gate" id="soundGate">🔊 Activer le son</button>
-
-  <div class="wordmark">
+  <div class="wordmark-intro">
     <h1>KORÉ</h1>
-    <p class="tagline">L'origine · sculptée · portée</p>
+    <p class="tagline-intro">L'origine · sculptée · portée</p>
   </div>
-
   <div class="skip-hint" onclick="enterSite()">
     Passer <kbd>Espace</kbd>
   </div>
-
 </div>
 
+<!-- ═══════════════ SITE ═══════════════ -->
+
+<nav id="nav">
+  <div class="nav-logo">KORÉ</div>
+  <ul class="nav-links">
+    <li><a href="#products">Collection</a></li>
+    <li><a href="#manifesto">Manifeste</a></li>
+    <li><a href="#atelier">Atelier</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div class="nav-cart">
+    Panier <span class="dot"></span> 0
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <video class="hero-video" autoplay loop muted playsinline id="heroVideo">
+    <source src="assets/hero-video.mp4" type="video/mp4">
+  </video>
+  <div class="hero-video-fallback"></div>
+  <div class="hero-overlay"></div>
+
+  <div class="hero-content">
+    <div class="hero-eyebrow">— Collection 001 · L'origine —</div>
+    <h1 class="hero-title">
+      <span class="line"><span>Ce qui n'a</span></span>
+      <span class="line"><span>jamais existé.</span></span>
+    </h1>
+    <p class="hero-sub">Une paire. Sculptée dans la mémoire du continent. Portée vers ce qui vient.</p>
+  </div>
+
+  <div class="hero-scroll">
+    Défiler
+    <div class="line-anim"></div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<section class="marquee">
+  <div class="marquee-track">
+    <span>KORÉ 001</span><span class="dot"></span>
+    <span class="italic">l'origine</span><span class="dot"></span>
+    <span>sculptée</span><span class="dot"></span>
+    <span class="italic">portée</span><span class="dot"></span>
+    <span>Abidjan</span><span class="dot"></span>
+    <span class="italic">2026</span><span class="dot"></span>
+    <span>KORÉ 001</span><span class="dot"></span>
+    <span class="italic">l'origine</span><span class="dot"></span>
+    <span>sculptée</span><span class="dot"></span>
+    <span class="italic">portée</span><span class="dot"></span>
+    <span>Abidjan</span><span class="dot"></span>
+    <span class="italic">2026</span><span class="dot"></span>
+  </div>
+</section>
+
+<!-- MANIFESTO -->
+<section class="manifesto" id="manifesto">
+  <div class="manifesto-label">Manifeste</div>
+  <p class="manifesto-text" id="manifestoText">
+    Nous ne fabriquons pas des chaussures. Nous <span class="highlight">exhumons</span> une manière d'être debout, une manière de <span class="highlight">marcher</span> sur cette terre. Chaque KORÉ est <span class="highlight">une relique</span> d'un futur africain qui n'a pas encore eu lieu.
+  </p>
+</section>
+
+<!-- PRODUCTS -->
+<section class="products-section" id="products">
+  <div class="products-header reveal">
+    <h2 class="products-title">La <em>collection</em></h2>
+    <p class="products-meta">Chaque pièce en édition limitée. Numérotée. Signée. Née à Abidjan.</p>
+  </div>
+
+  <div class="products-grid">
+
+    <!-- CARD 1 : LG - KORÉ 001 -->
+    <div class="product-card card-lg reveal">
+      <div class="product-badge">Édition originelle</div>
+      <div class="product-image placeholder">
+        <!-- <img src="assets/products/kore-001.jpg" alt="KORÉ 001"> -->
+      </div>
+      <div class="product-info">
+        <div class="product-tag">Nº 001 / L'origine</div>
+        <h3 class="product-name">KORÉ <em>001</em></h3>
+        <p class="product-desc">Corde indigo tressée. Semelle en pierre bronze. Glyphes Nsibidi gravés sur le talon.</p>
+        <div class="product-bottom">
+          <div class="product-price">€ 890</div>
+          <a href="#" class="product-cta">Découvrir</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARD 2 : SM -->
+    <div class="product-card card-sm reveal">
+      <div class="product-badge">Nouveau</div>
+      <div class="product-image placeholder">
+        <!-- <img src="assets/products/kore-002.jpg" alt="KORÉ 002"> -->
+      </div>
+      <div class="product-info">
+        <div class="product-tag">Nº 002 / Le ciel de cordes</div>
+        <h3 class="product-name">KORÉ <em>002</em></h3>
+        <p class="product-desc">La tresse s'élève. Cuir vermillon. Semelle onyx.</p>
+        <div class="product-bottom">
+          <div class="product-price">€ 940</div>
+          <a href="#" class="product-cta">Découvrir</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARD 3 : MD -->
+    <div class="product-card card-md reveal">
+      <div class="product-image placeholder">
+        <!-- <img src="assets/products/kore-003.jpg" alt="KORÉ 003"> -->
+      </div>
+      <div class="product-info">
+        <div class="product-tag">Nº 003 / Latérite</div>
+        <h3 class="product-name">KORÉ <em>003</em></h3>
+        <p class="product-desc">Rouge de la terre. Cordes ocre. Rare.</p>
+        <div class="product-bottom">
+          <div class="product-price">€ 820</div>
+          <a href="#" class="product-cta">Découvrir</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARD 4 : MD -->
+    <div class="product-card card-md reveal">
+      <div class="product-badge">Bientôt</div>
+      <div class="product-image placeholder">
+        <!-- <img src="assets/products/kore-004.jpg" alt="KORÉ 004"> -->
+      </div>
+      <div class="product-info">
+        <div class="product-tag">Nº 004 / Obsidienne</div>
+        <h3 class="product-name">KORÉ <em>004</em></h3>
+        <p class="product-desc">Noir sur noir. La chaussure disparaît. Il ne reste que le mouvement.</p>
+        <div class="product-bottom">
+          <div class="product-price">€ 1 100</div>
+          <a href="#" class="product-cta">Rejoindre la liste</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARD 5 : WIDE - Editorial banner -->
+    <div class="product-card card-wide reveal">
+      <div class="product-image placeholder">
+        <!-- <img src="assets/products/kore-editorial.jpg" alt="Éditorial"> -->
+      </div>
+      <div class="product-info">
+        <div class="product-tag">Éditorial · Automne 2026</div>
+        <h3 class="product-name">Ce que <em>portent</em> les fantômes du futur</h3>
+        <div class="product-bottom">
+          <div></div>
+          <a href="#" class="product-cta">Lire</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer id="contact">
+  <div class="footer-hero reveal">KORÉ</div>
+
+  <div class="footer-grid">
+    <div class="footer-col footer-newsletter">
+      <h4>Le cercle</h4>
+      <p>Rejoignez les premières annonces. Drops limités, coulisses de l'atelier, textes exclusifs.</p>
+      <form onsubmit="event.preventDefault(); alert('Inscrit au cercle KORÉ');">
+        <input type="email" placeholder="votre.email@exemple.com" required>
+        <button type="submit">Rejoindre →</button>
+      </form>
+    </div>
+    <div class="footer-col">
+      <h4>Maison</h4>
+      <ul>
+        <li><a href="#">Collection</a></li>
+        <li><a href="#">Éditions limitées</a></li>
+        <li><a href="#">Bientôt</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Atelier</h4>
+      <ul>
+        <li><a href="#">Notre histoire</a></li>
+        <li><a href="#">Artisans</a></li>
+        <li><a href="#">Presse</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Soutien</h4>
+      <ul>
+        <li><a href="#">Livraison</a></li>
+        <li><a href="#">Guide des tailles</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <div>© 2026 KORÉ · Abidjan · Tous droits réservés</div>
+    <div>Fabriqué avec le continent en tête</div>
+  </div>
+</footer>
+
 <script>
+  /* ═══════════════ INTRO ═══════════════ */
   const intro = document.getElementById('intro');
   const video = document.getElementById('elephantVideo');
   const soundGate = document.getElementById('soundGate');
 
-  // Muted autoplay (always allowed by browsers).
   video.volume = 1.0;
   video.play().catch(err => console.log('play error:', err));
+  setTimeout(() => { if (video.muted) soundGate.classList.add('show'); }, 500);
 
-  // Show sound gate after 500ms so user knows they can enable sound
-  setTimeout(() => {
-    if (video.muted) soundGate.classList.add('show');
-  }, 500);
-
-  // Activate sound on ANY click in the intro
   function activateSound() {
     if (video.muted) {
       video.muted = false;
-      video.volume = 1.0;
       soundGate.style.display = 'none';
     }
   }
-
   intro.addEventListener('click', activateSound);
-  soundGate.addEventListener('click', (e) => {
-    e.stopPropagation();
-    activateSound();
-  });
+  soundGate.addEventListener('click', (e) => { e.stopPropagation(); activateSound(); });
 
-  // Space to skip
   document.addEventListener('keydown', (e) => {
-    if (e.code === 'Space' || e.key === ' ') {
+    if ((e.code === 'Space' || e.key === ' ') && intro.style.display !== 'none') {
       e.preventDefault();
       enterSite();
     }
@@ -204,10 +796,119 @@
     setTimeout(() => {
       intro.style.display = 'none';
       video.pause();
-      document.body.style.overflow = 'auto';
-      document.body.innerHTML += '<div style="padding:80px;font-family:serif;font-size:28px;color:#F5EFE6;background:#000;min-height:100vh;">[Home KORÉ — prochaine étape]</div>';
+      const heroVideo = document.getElementById('heroVideo');
+      heroVideo.play().catch(() => {});
     }, 1200);
   }
+
+  /* ═══════════════ CURSOR ═══════════════ */
+  const cursor = document.getElementById('cursor');
+  const cursorRing = document.getElementById('cursorRing');
+  let mouseX = 0, mouseY = 0;
+  let ringX = 0, ringY = 0;
+
+  document.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX; mouseY = e.clientY;
+    cursor.style.left = mouseX + 'px';
+    cursor.style.top = mouseY + 'px';
+  });
+
+  function animateRing() {
+    ringX += (mouseX - ringX) * 0.15;
+    ringY += (mouseY - ringY) * 0.15;
+    cursorRing.style.left = ringX + 'px';
+    cursorRing.style.top = ringY + 'px';
+    requestAnimationFrame(animateRing);
+  }
+  animateRing();
+
+  document.querySelectorAll('a, button, .product-card, .nav-links li, .skip-hint').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursor.classList.add('hover');
+      cursorRing.classList.add('hover');
+    });
+    el.addEventListener('mouseleave', () => {
+      cursor.classList.remove('hover');
+      cursorRing.classList.remove('hover');
+    });
+  });
+
+  /* ═══════════════ NAV SCROLL ═══════════════ */
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 100) nav.classList.add('scrolled');
+    else nav.classList.remove('scrolled');
+  });
+
+  /* ═══════════════ MANIFESTO WORD REVEAL ═══════════════ */
+  const manifestoText = document.getElementById('manifestoText');
+  const originalHTML = manifestoText.innerHTML;
+  // Wrap each word in a span (preserving existing .highlight spans)
+  const temp = document.createElement('div');
+  temp.innerHTML = originalHTML;
+  function wrapWords(node) {
+    const kids = Array.from(node.childNodes);
+    kids.forEach(child => {
+      if (child.nodeType === 3) {
+        const words = child.textContent.split(/(\s+)/);
+        const frag = document.createDocumentFragment();
+        words.forEach(w => {
+          if (w.trim()) {
+            const s = document.createElement('span');
+            s.className = 'word';
+            s.textContent = w;
+            frag.appendChild(s);
+          } else {
+            frag.appendChild(document.createTextNode(w));
+          }
+        });
+        node.replaceChild(frag, child);
+      } else if (child.nodeType === 1 && child.classList.contains('highlight')) {
+        child.classList.add('word');
+      }
+    });
+  }
+  wrapWords(temp);
+  manifestoText.innerHTML = temp.innerHTML;
+
+  const words = manifestoText.querySelectorAll('.word');
+  const manifestoObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        words.forEach((w, i) => {
+          setTimeout(() => w.classList.add('visible'), i * 60);
+        });
+        manifestoObserver.disconnect();
+      }
+    });
+  }, { threshold: 0.3 });
+  manifestoObserver.observe(manifestoText);
+
+  /* ═══════════════ GENERIC REVEAL ═══════════════ */
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+  /* ═══════════════ PRODUCT CARD 3D TILT ═══════════════ */
+  document.querySelectorAll('.product-card').forEach(card => {
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width;
+      const y = (e.clientY - rect.top) / rect.height;
+      const rx = (y - 0.5) * -8;
+      const ry = (x - 0.5) * 8;
+      card.style.transform = `translateY(-8px) perspective(1000px) rotateX(${rx}deg) rotateY(${ry}deg)`;
+    });
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = '';
+    });
+  });
 </script>
 
 </body>
