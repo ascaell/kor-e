@@ -165,29 +165,28 @@
   const video = document.getElementById('elephantVideo');
   const soundGate = document.getElementById('soundGate');
 
-  // Video starts muted (guaranteed autoplay). Try to unmute immediately.
+  // Muted autoplay (always allowed by browsers).
   video.volume = 1.0;
+  video.play().catch(err => console.log('play error:', err));
 
-  video.play().then(() => {
-    // Playing (muted). Try to unmute.
-    video.muted = false;
-    // If browser blocks the unmute, muted stays true → show gate
-    setTimeout(() => {
-      if (video.muted) {
-        soundGate.classList.add('show');
-      }
-    }, 100);
-  }).catch(() => {
-    // Even muted autoplay failed (rare) → show gate
-    soundGate.classList.add('show');
-  });
+  // Show sound gate after 500ms so user knows they can enable sound
+  setTimeout(() => {
+    if (video.muted) soundGate.classList.add('show');
+  }, 500);
 
+  // Activate sound on ANY click in the intro
+  function activateSound() {
+    if (video.muted) {
+      video.muted = false;
+      video.volume = 1.0;
+      soundGate.style.display = 'none';
+    }
+  }
+
+  intro.addEventListener('click', activateSound);
   soundGate.addEventListener('click', (e) => {
     e.stopPropagation();
-    video.muted = false;
-    video.volume = 1.0;
-    video.play();
-    soundGate.style.display = 'none';
+    activateSound();
   });
 
   // Space to skip
